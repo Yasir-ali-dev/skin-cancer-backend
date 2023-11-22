@@ -16,7 +16,7 @@ app.use(cors());
 app.use(helmet());
 
 app.use("/auth", authRouter);
-app.get("/", authentication, (req, res) => {
+app.get("/", (req, res) => {
   res.send("dashboeard");
 });
 
