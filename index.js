@@ -10,7 +10,6 @@ const authentication = require("./middlewares/authentication");
 const app = express();
 
 const { default: mongoose } = require("mongoose");
-
 app.use(express.json());
 app.use(cors());
 app.use(helmet());
@@ -19,6 +18,8 @@ app.use("/auth", authRouter);
 app.get("/", (req, res) => {
   res.send("dashboeard");
 });
+
+console.log("s");
 
 app.use(errorHandler);
 const port = process.env.PORT;
