@@ -15,11 +15,10 @@ app.use(cors());
 app.use(helmet());
 
 app.use("/auth", authRouter);
-app.get("/", (req, res) => {
+
+app.get("/", authentication, (req, res) => {
   res.send("dashboeard");
 });
-
-console.log("s");
 
 app.use(errorHandler);
 const port = process.env.PORT;
