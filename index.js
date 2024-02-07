@@ -5,6 +5,7 @@ require("dotenv").config();
 require("express-async-errors");
 const connecDB = require("./db/connectDB");
 const authRouter = require("./routes/auth-route");
+const modelRouter = require("./routes/model-routes");
 const errorHandler = require("./middlewares/errorHandler");
 const authentication = require("./middlewares/authentication");
 const app = express();
@@ -15,6 +16,7 @@ app.use(cors());
 app.use(helmet());
 
 app.use("/auth", authRouter);
+app.use("/models", modelRouter);
 
 app.get("/", authentication, (req, res) => {
   res.send("dashboeard");
@@ -32,7 +34,7 @@ const start = async () => {
     console.log(error);
   }
   mongoose.connection.on("error", (err) => {
-    logError(err);
+    console.log(err);
   });
 };
 
