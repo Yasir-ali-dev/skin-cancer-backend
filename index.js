@@ -6,6 +6,7 @@ require("express-async-errors");
 const connecDB = require("./db/connectDB");
 const authRouter = require("./routes/auth-route");
 const modelRouter = require("./routes/model-routes");
+const reportRouter = require("./routes/report-route");
 const errorHandler = require("./middlewares/errorHandler");
 const authentication = require("./middlewares/authentication");
 const app = express();
@@ -17,6 +18,7 @@ app.use(helmet());
 
 app.use("/auth", authRouter);
 app.use("/models", modelRouter);
+app.use("/reports", reportRouter);
 
 app.get("/", authentication, (req, res) => {
   res.send("dashboeard");
