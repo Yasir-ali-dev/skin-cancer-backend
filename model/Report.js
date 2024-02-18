@@ -1,5 +1,5 @@
 const { default: mongoose } = require("mongoose");
-
+const { modelSchema } = require("./Model");
 const reportSchema = mongoose.Schema({
   report_generate_date: {
     type: Date,
@@ -10,10 +10,7 @@ const reportSchema = mongoose.Schema({
     required: [true, "report_details is required!"],
     minLength: [5, "please provide report details"],
   },
-  model: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Model",
-  },
+  model: { type: modelSchema },
 });
 
 module.exports = mongoose.model("Report", reportSchema);

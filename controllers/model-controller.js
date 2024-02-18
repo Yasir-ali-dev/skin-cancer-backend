@@ -1,5 +1,5 @@
 const { StatusCodes } = require("http-status-codes");
-const Model = require("../model/Model");
+const { Model } = require("../model/Model");
 const { BadRequestError, NotFoundError } = require("../errors");
 
 const getAllModels = async (req, res) => {
@@ -10,6 +10,10 @@ const createModel = async (req, res) => {
   const { model_name } = req.body;
   if (!model_name) {
     throw new BadRequestError("please provide model_name");
+  }
+  const exist = await Model.find({ model_name: model_name });
+  if (exist) {
+    throw new BadRequestError("model already exist");
   }
   let newModel;
   try {

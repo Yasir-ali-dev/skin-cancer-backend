@@ -1,4 +1,4 @@
-const { default: mongoose } = require("mongoose");
+const { default: mongoose, model } = require("mongoose");
 
 const modelSchema = mongoose.Schema({
   model_name: {
@@ -7,4 +7,5 @@ const modelSchema = mongoose.Schema({
     enum: ["RESNET", "DL"],
   },
 });
-module.exports = mongoose.model("Model", modelSchema);
+const Model = mongoose.model("Model", modelSchema);
+module.exports = { Model, modelSchema };

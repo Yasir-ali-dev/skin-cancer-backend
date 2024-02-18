@@ -1,13 +1,12 @@
 const { StatusCodes } = require("http-status-codes");
 const Report = require("../model/Report");
 const { BadRequestError, NotFoundError } = require("../errors");
-const Model = require("../model/Model");
+const { Model } = require("../model/Model");
 
 const allReports = async (req, res) => {
   const reports = await Report.find({});
   res.status(StatusCodes.OK).json({ success: true, reports: reports });
 };
-
 const createReport = async (req, res) => {
   const { report_generate_date, report_details, model } = req.body;
   if (!report_generate_date || !report_details) {
@@ -22,6 +21,7 @@ const createReport = async (req, res) => {
   try {
     fetchedModel = await Model.find({ model_name: model });
   } catch (error) {
+    console.log(error);
     throw new NotFoundError(`not found model ${model}`);
   }
   let new_report;
@@ -65,18 +65,16 @@ const updateReport = async (req, res) => {
       "please provide report_generate_date or report_details to update"
     );
   }
-  const updated_report = await Model.findByIdAndUpdate(report_id_, req.body, {
+  console.log(report_id_);
+  const report = await Report.findByIdAndUpdate(report_id_, req.body, {
     new: true,
   });
-  if (!updated_report) {
+  console.log(report);
+  if (!report) {
     throw new NotFoundError(`report not found with id: ${report_id_}`);
   }
-
-  res
-    .status(StatusCodes.OK)
-    .json({ status: true, updated_report: updated_report });
+  res.status(StatusCodes.OK).json({ status: true, updated_report: report });
 };
-
 module.exports = {
   allReports,
   createReport,
