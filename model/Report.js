@@ -12,5 +12,4 @@ const reportSchema = mongoose.Schema({
   },
   model: { type: modelSchema },
 });
-
 module.exports = mongoose.model("Report", reportSchema);

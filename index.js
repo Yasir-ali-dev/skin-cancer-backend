@@ -7,6 +7,8 @@ const connecDB = require("./db/connectDB");
 const authRouter = require("./routes/auth-route");
 const modelRouter = require("./routes/model-routes");
 const reportRouter = require("./routes/report-route");
+const feedbackRouter = require("./routes/feedback-route");
+
 const errorHandler = require("./middlewares/errorHandler");
 const authentication = require("./middlewares/authentication");
 const app = express();
@@ -17,6 +19,7 @@ app.use(cors());
 app.use(helmet());
 
 app.use("/auth", authRouter);
+app.use("/feedbacks", feedbackRouter);
 app.use("/models", modelRouter);
 app.use("/reports", reportRouter);
 

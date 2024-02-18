@@ -42,6 +42,7 @@ const createReport = async (req, res) => {
     .status(StatusCodes.CREATED)
     .json({ success: true, new_report: new_report });
 };
+
 const getReport = async (req, res) => {
   const report_id_ = req.params.report_id.slice(1);
   const report = await Report.findById(report_id_);
