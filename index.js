@@ -9,6 +9,7 @@ const modelRouter = require("./routes/model-routes");
 const reportRouter = require("./routes/report-route");
 const feedbackRouter = require("./routes/feedback-route");
 const lesionRouter = require("./routes/lesion-route");
+const skinImageRouter = require("./routes/image-route");
 
 const errorHandler = require("./middlewares/errorHandler");
 const authentication = require("./middlewares/authentication");
@@ -23,6 +24,7 @@ app.use("/auth", authRouter);
 app.use("/feedbacks", feedbackRouter);
 app.use("/models", modelRouter);
 app.use("/reports", reportRouter);
+app.use("/images", skinImageRouter);
 app.use("/lesions", lesionRouter);
 
 app.get("/", authentication, (req, res) => {
