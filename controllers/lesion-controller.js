@@ -7,42 +7,62 @@ const getAllLesions = async (req, res) => {
   res.status(StatusCodes.OK).json({ status: true, all_lesions: all_lesions });
 };
 
-const createFeedback = async (req, res) => {
-  const { feedback_details, feedback_type } = req.body;
-  if (!feedback_type || !feedback_details) {
-    throw new BadRequestError("please provide feedback_type, feedback_details");
-  }
-  //physicain missing
+const createLesion = async (req, res) => {
+  const {
+    lesion_type,
+    lesion_location,
+    lesion_color,
+    lesion_size,
+    lesion_texture,
+  } = req.body;
 
-  let newFeedback;
+  if (
+    !lesion_type ||
+    !lesion_location ||
+    !lesion_color ||
+    !lesion_size ||
+    !lesion_texture
+  ) {
+    throw new BadRequestError(
+      "please provide lesion_type, lesion_location, lesion_color, lesion_size,  lesion_texture,"
+    );
+  }
+  //physicain image missing
+
+  let newLesion;
   try {
-    newFeedback = await Feedback.create({ feedback_details, feedback_type });
+    newLesion = await Lesion.create({
+      lesion_type,
+      lesion_location,
+      lesion_color,
+      lesion_size,
+      lesion_texture,
+    });
   } catch (error) {
-    throw new BadRequestError("please provide valid feedback_type");
+    console.log(error);
+    throw new BadRequestError(`please provide ${error}`);
   }
-  res
-    .status(StatusCodes.CREATED)
-    .json({ status: true, new_feedback: newFeedback });
+  res.status(StatusCodes.CREATED).json({ status: true, new_lesion: newLesion });
 };
 
-const getFeedback = async (req, res) => {
-  const feedback_id_ = req.params.feedback_id.slice(1);
-  const feedback = await Feedback.findById(feedback_id_);
-  if (!feedback) {
-    throw new NotFoundError(`model not found with id: ${feedback_id_}`);
+const getLesion = async (req, res) => {
+  const lesion_id_ = req.params.lesion_id.slice(1);
+  const lesion = await Lesion.findById(lesion_id_);
+  if (!lesion) {
+    throw new NotFoundError(`lesion not found with id: ${lesion_id_}`);
   }
-  res.status(StatusCodes.OK).json({ status: true, feedback: feedback });
+  res.status(StatusCodes.OK).json({ status: true, lesion: lesion });
 };
 
-const deleteFeedback = async (req, res) => {
-  const feedback_id_ = req.params.feedback_id.slice(1);
-  const deleted_feedback = await Feedback.findByIdAndDelete(feedback_id_);
-  if (!deleted_feedback) {
-    throw new NotFoundError(`model not found with id: ${feedback_id_}`);
+const deleteLesion = async (req, res) => {
+  const lesion_id_ = req.params.lesion_id.slice(1);
+  const deleted_lesion = await Lesion.findByIdAndDelete(lesion_id_);
+  if (!deleted_lesion) {
+    throw new NotFoundError(`model not found with id: ${lesion_id_}`);
   }
   res
     .status(StatusCodes.OK)
-    .json({ status: true, deleted_feedback: deleted_feedback });
+    .json({ status: true, deleted_lesion: deleted_lesion });
 };
 
 const updateFeedback = async (req, res) => {
@@ -70,4 +90,7 @@ const updateFeedback = async (req, res) => {
 
 module.exports = {
   getAllLesions,
+  createLesion,
+  deleteLesion,
+  getLesion,
 };

@@ -9,7 +9,7 @@ const lesionSchema = mongoose.Schema({
     type: String,
     required: [true, "lesion_location is required"],
   },
-  lesion_location: {
+  lesion_size: {
     type: String,
     required: [true, "lesion_size is required"],
   },
