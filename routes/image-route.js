@@ -1,9 +1,12 @@
 const express = require("express");
 
 const router = express.Router();
-const { getAllSkinImages } = require("../controllers/skin-image-controller");
+const {
+  getAllSkinImages,
+  createSkinImage,
+} = require("../controllers/skin-image-controller");
 
-router.route("/").get(getAllSkinImages);
+router.route("/").get(getAllSkinImages).post(createSkinImage);
 
 // router
 //   .route("/:lesion_id")
