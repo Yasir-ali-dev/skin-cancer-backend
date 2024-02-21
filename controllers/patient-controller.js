@@ -25,46 +25,72 @@ const createPatient = async (req, res) => {
   res.status(StatusCodes.CREATED).json({ success: true, patient: patient });
 };
 
-const getSkinImage = async (req, res) => {
-  const image_id_ = req.params.image_id.slice(1);
-  const image = await Image.findById(image_id_);
-  if (!image) {
-    throw new NotFoundError(`image not found with id: ${image_id_}`);
+const getPatient = async (req, res) => {
+  const patient_id_ = req.params.patient_id.slice(1);
+  const patient = await Patient.findById(patient_id_);
+  if (!patient) {
+    throw new NotFoundError(`patient not found with id: ${patient_id_}`);
   }
-  res.status(StatusCodes.OK).json({ status: true, image: image });
+  res.status(StatusCodes.OK).json({ status: true, patient: patient });
 };
 
-const deleteImage = async (req, res) => {
-  const image_id_ = req.params.image_id.slice(1);
-  const deleted_image = await Image.findByIdAndDelete(image_id_);
-  if (!deleted_image) {
-    throw new NotFoundError(`image not found with id: ${image_id_}`);
+const deletePatient = async (req, res) => {
+  const patient_id_ = req.params.patient_id.slice(1);
+  const deleted_patient = await Patient.findByIdAndDelete(patient_id_);
+  if (!deleted_patient) {
+    throw new NotFoundError(`patient not found with id: ${patient_id_}`);
   }
   res
     .status(StatusCodes.OK)
-    .json({ status: true, deleted_image: deleted_image });
+    .json({ status: true, deleted_patient: deleted_patient });
 };
 
-const updateSkinImage = async (req, res) => {
-  const image_id_ = req.params.image_id.slice(1);
-  const { image_url, image_source, captured_date } = req.body;
-  if (!image_source && !image_url && !captured_date) {
+const updatePatient = async (req, res) => {
+  const patient_id_ = req.params.patient_id.slice(1);
+  const {
+    name,
+    age,
+    phone,
+    gender,
+    cancer_acquired_date,
+    date_of_birth,
+    address,
+    email,
+  } = req.body;
+
+  if (
+    !name &&
+    !age &&
+    !phone &&
+    !gender &&
+    !cancer_acquired_date &&
+    !date_of_birth &&
+    !address &&
+    !email
+  ) {
     throw new BadRequestError(
-      "please provide image_url, image_source or captured_date to update"
+      "please providename, age, phone, gender, cancer_acquired_date, date_of_birth, address or email to update"
     );
   }
-  const updated_image = await Image.findByIdAndUpdate(image_id_, req.body, {
-    new: true,
-  });
-  if (!updated_image) {
-    throw new NotFoundError(`image not found with id: ${image_id_}`);
+  const updated_patient = await Patient.findByIdAndUpdate(
+    patient_id_,
+    req.body,
+    {
+      new: true,
+    }
+  );
+  if (!updated_patient) {
+    throw new NotFoundError(`image not found with id: ${patient_id_}`);
   }
   res
     .status(StatusCodes.OK)
-    .json({ status: true, updated_image: updated_image });
+    .json({ status: true, updated_patient: updated_patient });
 };
 
 module.exports = {
   getAllPatients,
   createPatient,
+  getPatient,
+  deletePatient,
+  updatePatient,
 };
