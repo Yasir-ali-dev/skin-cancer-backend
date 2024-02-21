@@ -8,25 +8,21 @@ const getAllPatients = async (req, res) => {
   res.status(StatusCodes.OK).json({ success: true, patients: patients });
 };
 
-const createSkinImage = async (req, res) => {
-  const { image_url, image_source, captured_date } = req.body;
-  if (!image_url || !captured_date || !image_source) {
-    throw new BadRequestError(
-      "please provide image_url, image_source, captured_date"
-    );
+const createPatient = async (req, res) => {
+  const { name, age, phone, gender } = req.body;
+  if (!name || !age || !phone || !gender) {
+    throw new BadRequestError("please provide name, age, phone and gender");
   }
-  let skin_image;
+  let patient;
   try {
-    skin_image = await Image.create({ image_source, image_url, captured_date });
+    patient = await Patient.create(req.body);
   } catch (error) {
     console.log(error);
     throw new BadRequestError(
-      "please provide valid image_url, image_source, captured_date!"
+      "please provide valid name, age, phone and gender"
     );
   }
-  res
-    .status(StatusCodes.CREATED)
-    .json({ success: true, skin_image: skin_image });
+  res.status(StatusCodes.CREATED).json({ success: true, patient: patient });
 };
 
 const getSkinImage = async (req, res) => {
@@ -70,4 +66,5 @@ const updateSkinImage = async (req, res) => {
 
 module.exports = {
   getAllPatients,
+  createPatient,
 };
