@@ -34,5 +34,11 @@ const patientSchema = mongoose.Schema({
   date_of_birth: {
     type: Date,
   },
+  images: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Image",
+    },
+  ],
 });
 module.exports = mongoose.model("Patient", patientSchema);

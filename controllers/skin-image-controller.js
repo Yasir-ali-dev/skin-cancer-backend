@@ -1,6 +1,7 @@
 const { StatusCodes } = require("http-status-codes");
 const Image = require("../model/Image");
 const { BadRequestError, NotFoundError } = require("../errors");
+const Patient = require("../model/Patient");
 
 const getAllSkinImages = async (req, res) => {
   const skin_images = await Image.find({});
@@ -8,15 +9,22 @@ const getAllSkinImages = async (req, res) => {
 };
 
 const createSkinImage = async (req, res) => {
-  const { image_url, image_source, captured_date } = req.body;
+  const { image_url, image_source, captured_date, patient_id } = req.body;
   if (!image_url || !captured_date || !image_source) {
     throw new BadRequestError(
       "please provide image_url, image_source, captured_date"
     );
   }
+  const patient = await Patient.findById(patient_id);
+  if (!patient) {
+    throw new NotFoundError(`patient not found with id: ${patient_id}`);
+  }
+
   let skin_image;
   try {
     skin_image = await Image.create({ image_source, image_url, captured_date });
+    patient.images.push(skin_image);
+    await patient.save();
   } catch (error) {
     console.log(error);
     throw new BadRequestError(
