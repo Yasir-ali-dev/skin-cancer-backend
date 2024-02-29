@@ -11,6 +11,8 @@ const feedbackRouter = require("./routes/feedback-route");
 const lesionRouter = require("./routes/lesion-route");
 const skinImageRouter = require("./routes/image-route");
 const patientRouter = require("./routes/patient-route");
+const physicianRouter = require("./routes/physician_route");
+
 const errorHandler = require("./middlewares/errorHandler");
 const authentication = require("./middlewares/authentication");
 const app = express();
@@ -27,6 +29,7 @@ app.use("/reports", reportRouter);
 app.use("/images", skinImageRouter);
 app.use("/patients", patientRouter);
 app.use("/lesions", lesionRouter);
+app.use("/physicians", physicianRouter);
 
 app.get("/", authentication, (req, res) => {
   res.send("dashboeard");
