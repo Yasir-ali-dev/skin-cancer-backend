@@ -14,6 +14,12 @@ const physicianSchema = mongoose.Schema({
     type: String,
     requied: [true, "specialization is required"],
   },
+  feedbacks: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Feedback",
+    },
+  ],
 });
 
 module.exports = mongoose.model("Physician", physicianSchema);

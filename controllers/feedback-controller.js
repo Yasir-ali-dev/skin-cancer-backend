@@ -2,6 +2,7 @@ const { StatusCodes } = require("http-status-codes");
 const { Model } = require("../model/Model");
 const { BadRequestError, NotFoundError } = require("../errors");
 const Feedback = require("../model/Feedback");
+const Physician = require("../model/Physician");
 
 const allFeedbacks = async (req, res) => {
   const allFeedbacks = await Feedback.find({});
@@ -11,16 +12,22 @@ const allFeedbacks = async (req, res) => {
 };
 
 const createFeedback = async (req, res) => {
-  const { feedback_details, feedback_type } = req.body;
+  const { feedback_details, feedback_type, physician_id } = req.body;
   if (!feedback_type || !feedback_details) {
     throw new BadRequestError("please provide feedback_type, feedback_details");
   }
-  //physicain missing
+  const physician = await Physician.findById(physician_id);
+  if (!physician) {
+    throw new NotFoundError(`physician not found with id: ${physician_id}`);
+  }
 
   let newFeedback;
   try {
     newFeedback = await Feedback.create({ feedback_details, feedback_type });
+    physician.feedbacks.push(newFeedback);
+    await physician.save();
   } catch (error) {
+    console.log(error);
     throw new BadRequestError("please provide valid feedback_type");
   }
   res
