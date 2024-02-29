@@ -22,4 +22,5 @@ const lesionSchema = mongoose.Schema({
     required: [true, "lesion_texture is required"],
   },
 });
-module.exports = mongoose.model("Lesion", lesionSchema);
+const Lesion = mongoose.model("Lesion", lesionSchema);
+module.exports = { Lesion, lesionSchema };

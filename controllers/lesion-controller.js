@@ -1,6 +1,7 @@
 const { StatusCodes } = require("http-status-codes");
 const { BadRequestError, NotFoundError } = require("../errors");
-const Lesion = require("../model/Lesion");
+const { Lesion } = require("../model/Lesion");
+const Image = require("../model/Image");
 
 const getAllLesions = async (req, res) => {
   const all_lesions = await Lesion.find({});
@@ -15,8 +16,8 @@ const createLesion = async (req, res) => {
     lesion_color,
     lesion_size,
     lesion_texture,
+    image_id,
   } = req.body;
-
   if (
     !lesion_type ||
     !lesion_location ||
@@ -28,8 +29,10 @@ const createLesion = async (req, res) => {
       "please provide lesion_type, lesion_location, lesion_color, lesion_size,  lesion_texture,"
     );
   }
-  //physicain image missing
-
+  const image = await Image.findById(image_id);
+  if (!image) {
+    throw new NotFoundError(`skin image not found with id: ${image_id}`);
+  }
   let newLesion;
   try {
     newLesion = await Lesion.create({
@@ -39,6 +42,8 @@ const createLesion = async (req, res) => {
       lesion_size,
       lesion_texture,
     });
+    image.lesion = newLesion;
+    await image.save();
   } catch (error) {
     console.log(error);
     throw new BadRequestError(`please provide ${error}`);
