@@ -2,6 +2,7 @@ const { StatusCodes } = require("http-status-codes");
 const Image = require("../model/Image");
 const { BadRequestError, NotFoundError } = require("../errors");
 const Patient = require("../model/Patient");
+const Physician = require("../model/Physician");
 
 const getAllPatients = async (req, res) => {
   const patients = await Patient.find({});
@@ -9,13 +10,19 @@ const getAllPatients = async (req, res) => {
 };
 
 const createPatient = async (req, res) => {
-  const { name, age, phone, gender } = req.body;
+  const { name, age, phone, gender, physician_id } = req.body;
   if (!name || !age || !phone || !gender) {
     throw new BadRequestError("please provide name, age, phone and gender");
+  }
+  const physician = await Physician.findById(physician_id);
+  if (!physician) {
+    throw new NotFoundError(`physician not found with id: ${physician_id}`);
   }
   let patient;
   try {
     patient = await Patient.create(req.body);
+    physician.patients.push(patient);
+    await physician.save();
   } catch (error) {
     console.log(error);
     throw new BadRequestError(
