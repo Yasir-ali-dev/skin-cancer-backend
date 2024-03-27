@@ -1,5 +1,6 @@
 const { default: mongoose } = require("mongoose");
 const { modelSchema } = require("./Model");
+const { lesionSchema } = require("./Lesion");
 const reportSchema = mongoose.Schema({
   report_generate_date: {
     type: Date,
@@ -10,6 +11,11 @@ const reportSchema = mongoose.Schema({
     required: [true, "report_details is required!"],
     minLength: [5, "please provide report details"],
   },
+  accuracy_score: {
+    type: String,
+    required: [true, "accuracy_score is required!"],
+  },
   model: { type: modelSchema },
+  lesion: { type: lesionSchema },
 });
 module.exports = mongoose.model("Report", reportSchema);

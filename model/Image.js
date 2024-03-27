@@ -13,6 +13,9 @@ const imageSchema = mongoose.Schema({
     type: String,
     required: [true, "captured_date is required"],
   },
-  lesion: { type: lesionSchema },
+  report: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Report",
+  },
 });
 module.exports = mongoose.model("Image", imageSchema);

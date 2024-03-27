@@ -1,7 +1,7 @@
 const { StatusCodes } = require("http-status-codes");
 const { BadRequestError, NotFoundError } = require("../errors");
 const { Lesion } = require("../model/Lesion");
-const Image = require("../model/Image");
+const Report = require("../model/Report");
 
 const getAllLesions = async (req, res) => {
   const all_lesions = await Lesion.find({});
@@ -10,40 +10,24 @@ const getAllLesions = async (req, res) => {
 
 // image embedding is missing
 const createLesion = async (req, res) => {
-  const {
-    lesion_type,
-    lesion_location,
-    lesion_color,
-    lesion_size,
-    lesion_texture,
-    image_id,
-  } = req.body;
-  if (
-    !lesion_type ||
-    !lesion_location ||
-    !lesion_color ||
-    !lesion_size ||
-    !lesion_texture
-  ) {
-    throw new BadRequestError(
-      "please provide lesion_type, lesion_location, lesion_color, lesion_size,  lesion_texture,"
-    );
+  const { lesion_type, lesion_severity, report_id } = req.body;
+  if (!lesion_type || !lesion_severity) {
+    throw new BadRequestError("please provide lesion_type, lesion_severity");
   }
-  const image = await Image.findById(image_id);
-  if (!image) {
-    throw new NotFoundError(`skin image not found with id: ${image_id}`);
+  const report = await Report.findById(report_id);
+  if (!report_id) {
+    throw new NotFoundError(`report not found with id: ${report_id}`);
   }
+
   let newLesion;
   try {
     newLesion = await Lesion.create({
       lesion_type,
-      lesion_location,
-      lesion_color,
-      lesion_size,
-      lesion_texture,
+      lesion_severity,
     });
-    image.lesion = newLesion;
-    await image.save();
+
+    report.lesion = newLesion;
+    await report.save();
   } catch (error) {
     console.log(error);
     throw new BadRequestError(`please provide ${error}`);

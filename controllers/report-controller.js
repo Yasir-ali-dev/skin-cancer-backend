@@ -2,21 +2,35 @@ const { StatusCodes } = require("http-status-codes");
 const Report = require("../model/Report");
 const { BadRequestError, NotFoundError } = require("../errors");
 const { Model } = require("../model/Model");
+const { Lesion } = require("../model/Lesion");
+const Image = require("../model/Image");
 
 const allReports = async (req, res) => {
   const reports = await Report.find({});
   res.status(StatusCodes.OK).json({ success: true, reports: reports });
 };
 const createReport = async (req, res) => {
-  const { report_generate_date, report_details, model } = req.body;
-  if (!report_generate_date || !report_details) {
+  const {
+    report_generate_date,
+    report_details,
+    model,
+    image_id,
+    accuracy_score,
+  } = req.body;
+  if (!report_generate_date || !report_details || !accuracy_score) {
     throw new BadRequestError(
-      "please provide report_generate_date, report_details"
+      "please provide report_generate_date, report_details, accuracy_score"
     );
   }
   if (!model) {
     throw new BadRequestError("please provide model");
   }
+
+  const image = await Image.findById(image_id);
+  if (!image) {
+    throw new NotFoundError(`image not found with id: ${image_id}`);
+  }
+
   let fetchedModel;
   try {
     fetchedModel = await Model.find({ model_name: model });
@@ -29,9 +43,12 @@ const createReport = async (req, res) => {
     new_report = new Report({
       report_details,
       report_generate_date,
+      accuracy_score,
     });
     new_report.model = fetchedModel[0];
     await new_report.save();
+    image.report = new_report;
+    await image.save();
   } catch (error) {
     console.log(error);
     throw new BadRequestError(

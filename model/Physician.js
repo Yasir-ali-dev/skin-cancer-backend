@@ -14,12 +14,6 @@ const physicianSchema = mongoose.Schema({
     type: String,
     requied: [true, "specialization is required"],
   },
-  feedbacks: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Feedback",
-    },
-  ],
   patients: [
     {
       type: mongoose.Schema.Types.ObjectId,

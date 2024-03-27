@@ -14,9 +14,21 @@ const feedbackSchema = mongoose.Schema({
       "please provide description of feedback, more than one word",
     ],
   },
-  physician: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Physician",
+  lesion_location: {
+    type: String,
+    required: [true, "lesion_location is required"],
+  },
+  lesion_size: {
+    type: String,
+    required: [true, "lesion_size is required"],
+  },
+  lesion_color: {
+    type: String,
+    required: [true, "lesion_color is required"],
+  },
+  lesion_texture: {
+    type: String,
+    required: [true, "lesion_texture is required"],
   },
 });
 module.exports = mongoose.model("Feedback", feedbackSchema);
