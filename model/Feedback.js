@@ -31,4 +31,6 @@ const feedbackSchema = mongoose.Schema({
     required: [true, "lesion_texture is required"],
   },
 });
-module.exports = mongoose.model("Feedback", feedbackSchema);
+const Feedback = mongoose.model("Feedback", feedbackSchema);
+
+module.exports = { feedbackSchema, Feedback };

@@ -1,8 +1,8 @@
 const { StatusCodes } = require("http-status-codes");
 const { Model } = require("../model/Model");
 const { BadRequestError, NotFoundError } = require("../errors");
-const Feedback = require("../model/Feedback");
-const Physician = require("../model/Physician");
+const { Feedback } = require("../model/Feedback");
+const Report = require("../model/Report");
 
 const allFeedbacks = async (req, res) => {
   const allFeedbacks = await Feedback.find({});
@@ -12,20 +12,44 @@ const allFeedbacks = async (req, res) => {
 };
 
 const createFeedback = async (req, res) => {
-  const { feedback_details, feedback_type, physician_id } = req.body;
-  if (!feedback_type || !feedback_details) {
-    throw new BadRequestError("please provide feedback_type, feedback_details");
-  }
-  const physician = await Physician.findById(physician_id);
-  if (!physician) {
-    throw new NotFoundError(`physician not found with id: ${physician_id}`);
+  const {
+    feedback_details,
+    feedback_type,
+    report_id,
+    lesion_location,
+    lesion_size,
+    lesion_color,
+    lesion_texture,
+  } = req.body;
+  if (
+    !feedback_type ||
+    !feedback_details ||
+    !lesion_location ||
+    !lesion_size ||
+    !lesion_color ||
+    !lesion_texture
+  ) {
+    throw new BadRequestError(
+      "please provide feedback_details, feedback_type, lesion_location, lesion_size, lesion_color, lesion_texture,"
+    );
   }
 
+  const report = await Report.findById(report_id);
+  if (!report) {
+    throw new NotFoundError(`report not found with id: ${report_id}`);
+  }
   let newFeedback;
   try {
-    newFeedback = await Feedback.create({ feedback_details, feedback_type });
-    physician.feedbacks.push(newFeedback);
-    await physician.save();
+    newFeedback = await Feedback.create({
+      feedback_details,
+      feedback_type,
+      lesion_location,
+      lesion_size,
+      lesion_color,
+      lesion_texture,
+    });
+    report.feedback = newFeedback;
+    await report.save();
   } catch (error) {
     console.log(error);
     throw new BadRequestError("please provide valid feedback_type");

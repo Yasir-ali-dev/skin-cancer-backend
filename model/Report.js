@@ -1,6 +1,7 @@
 const { default: mongoose } = require("mongoose");
 const { modelSchema } = require("./Model");
 const { lesionSchema } = require("./Lesion");
+const { feedbackSchema } = require("./Feedback");
 const reportSchema = mongoose.Schema({
   report_generate_date: {
     type: Date,
@@ -17,5 +18,6 @@ const reportSchema = mongoose.Schema({
   },
   model: { type: modelSchema },
   lesion: { type: lesionSchema },
+  feedback: { type: feedbackSchema },
 });
 module.exports = mongoose.model("Report", reportSchema);
