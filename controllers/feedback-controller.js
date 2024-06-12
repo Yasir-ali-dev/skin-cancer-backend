@@ -48,7 +48,7 @@ const createFeedback = async (req, res) => {
       lesion_color,
       lesion_texture,
     });
-    report.feedback = newFeedback;
+    report.feedbacks.push(newFeedback);
     await report.save();
   } catch (error) {
     console.log(error);

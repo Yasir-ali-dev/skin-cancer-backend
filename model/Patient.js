@@ -7,11 +7,12 @@ const patientSchema = mongoose.Schema({
     minLength: [5, "please provide fullname"],
   },
   age: {
-    type: Number,
+    type: String,
     required: [true, "age is required"],
   },
   gender: {
     type: String,
+    required: [true, "Gender is required"],
     enum: ["MALE", "FEMALE"],
   },
   cancer_acquired_date: {
@@ -32,7 +33,7 @@ const patientSchema = mongoose.Schema({
     type: String,
   },
   date_of_birth: {
-    type: Date,
+    type: String,
   },
   images: [
     {

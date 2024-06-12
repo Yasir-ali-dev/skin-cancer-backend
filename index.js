@@ -20,6 +20,7 @@ const app = express();
 const { default: mongoose } = require("mongoose");
 app.use(express.json());
 app.use(cors());
+
 app.use(helmet());
 
 app.use("/auth", authRouter);

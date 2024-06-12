@@ -2,6 +2,7 @@ const { StatusCodes } = require("http-status-codes");
 const Image = require("../model/Image");
 const { BadRequestError, NotFoundError } = require("../errors");
 const Patient = require("../model/Patient");
+const { default: axios } = require("axios");
 
 const getAllSkinImages = async (req, res) => {
   const skin_images = await Image.find({});
@@ -31,6 +32,7 @@ const createSkinImage = async (req, res) => {
       "please provide valid image_url, image_source, captured_date!"
     );
   }
+
   res
     .status(StatusCodes.CREATED)
     .json({ success: true, skin_image: skin_image });

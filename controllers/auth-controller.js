@@ -3,6 +3,8 @@ const bcrypt = require("bcrypt");
 const Auth = require("../model/Auth");
 const { StatusCodes } = require("http-status-codes");
 const { BadRequestError, UnAuthorisedError } = require("../errors");
+const authentication = require("../middlewares/authentication");
+require("dotenv").config();
 require("dotenv").config();
 
 const signUp = async (req, res) => {
@@ -29,7 +31,7 @@ const signUp = async (req, res) => {
     .json({ success: true, customer: customer, token });
 };
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
   const { password, email } = req.body;
   if (!password || !email) {
     throw new BadRequestError("please provide email and password");
@@ -44,9 +46,7 @@ const login = async (req, res) => {
     throw new UnAuthorisedError(`Invalid credentials`);
   }
 
-  res
-    .status(StatusCodes.OK)
-    .json({ success: true, message: `login successfull` });
+  res.status(StatusCodes.OK).json({ success: true, user: user });
 };
 
 module.exports = {

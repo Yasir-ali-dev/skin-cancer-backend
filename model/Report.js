@@ -18,6 +18,11 @@ const reportSchema = mongoose.Schema({
   },
   model: { type: modelSchema },
   lesion: { type: lesionSchema },
-  feedback: { type: feedbackSchema },
+  feedbacks: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Feedback",
+    },
+  ],
 });
 module.exports = mongoose.model("Report", reportSchema);
